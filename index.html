@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPA Calculator | حاسبة GPA</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-scene">
+  <div class="bg-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<div id="particles"></div>
+
+<div class="wrapper">
+
+  <nav class="topbar">
+    <div class="logo" id="logo-text">⬡ GPA Calc</div>
+    <div class="controls">
+      <button class="ctrl-btn" id="lang-btn" onclick="toggleLang()">عربي</button>
+      <button class="ctrl-btn" id="theme-btn" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </nav>
+
+  <div class="mode-tabs">
+    <button class="tab-btn active" id="tab-sgpa" onclick="switchMode('sgpa')">Semester GPA (Grades)</button>
+    <button class="tab-btn" id="tab-cgpa" onclick="switchMode('cgpa')">Cumulative GPA</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge" id="badge-text">Semester GPA Calculator</div>
+    <h1><span class="gradient-text" id="h1-main">Calculate Your</span><br><span id="h1-sub">Semester GPA</span></h1>
+    <p id="hero-desc">Enter your semester subjects, select letter grades (A+, A, B...) and credit hours to instantly check your semester performance.</p>
+  </div>
+
+  <div class="card-3d-wrapper">
+    <div class="card tilt-card" id="main-card">
+
+      <div id="view-sgpa" class="view-content active">
+        <div class="section-header">
+          <div class="section-title" id="subjects-label">SUBJECTS</div>
+          <button class="btn btn-ghost btn-sm" onclick="addSubject()" style="padding:0.4rem 1rem;font-size:0.8rem;border-radius:30px;" id="add-subj-btn">+ Add Subject</button>
+        </div>
+        <div class="subjects-list" id="subjects-list"></div>
+      </div>
+
+      <div id="view-cgpa" class="view-content">
+        <div class="section-header">
+          <div class="section-title" id="terms-label">TERMS</div>
+          <button class="btn btn-ghost btn-sm" onclick="addTerm()" style="padding:0.4rem 1rem;font-size:0.8rem;border-radius:30px;" id="add-term-btn">+ Add Term</button>
+        </div>
+        <div class="terms-list" id="terms-list"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="calculate()" id="calc-btn">
+          <span>⟳</span> <span id="calc-label">Calculate GPA</span>
+        </button>
+        <button class="btn btn-danger" onclick="resetAll()" id="reset-btn">✕ Reset</button>
+      </div>
+
+      <div class="result-panel" id="result-panel">
+        <div class="result-grid">
+          <div class="result-item full-width">
+            <div class="result-value" id="res-gpa">0.00</div>
+            <div class="result-key" id="res-gpa-label">Semester GPA</div>
+            <div class="grade-bar"><div class="grade-fill" id="grade-fill" style="width:0%"></div></div>
+          </div>
+          <div class="result-item">
+            <div class="result-value" id="res-count">0</div>
+            <div class="result-key" id="res-count-label">Subjects</div>
+          </div>
+          <div class="result-item">
+            <div class="result-value" id="res-hours">0</div>
+            <div class="result-key" id="res-hours-label">Total Hours</div>
+          </div>
+          <div class="result-item">
+            <div class="result-value" id="res-grade">—</div>
+            <div class="result-key" id="res-grade-label">Letter Grade</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="breakdown" id="breakdown">
+        <div class="breakdown-title" id="breakdown-label">CALCULATION BREAKDOWN</div>
+        <div id="breakdown-rows"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="section-title" id="formula-label">HOW IT WORKS</div>
+    <div class="formula" id="formula-text">
+      Semester GPA = <span>Σ(Grade Points × Hours)</span> ÷ <span>Σ(Hours)</span><br>
+      Each letter grade maps to specific standard scale points (+A/A=4.0, -A=3.7, +B=3.3...).
+    </div>
+  </div>
+
+</div>
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-brand" title="Seif Tarek Portfolio"><img src="Asset 4@2x-8.png"></div>
+    <div class="footer-credits">
+      <span class="by-text" id="footer-by">Built by</span>
+      <span class="footer-name" id="footer-name">Eng. Seif Tarek</span>
+    </div>
+  </div>
+</footer>
+<script src="main .js"></script>
+</body>
+</html>
