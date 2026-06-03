@@ -1,4 +1,3 @@
-
 // ── State ──
 let termCount = 0;
 let subjectCount = 0;
@@ -11,7 +10,8 @@ const gradePoints = {
   'A+': 4.0, 'A': 4.0, 'A-': 3.7,
   'B+': 3.3, 'B': 3.0, 'B-': 2.7,
   'C+': 2.3, 'C': 2.0, 'C-': 1.7,
-  'D+': 1.3, 'D': 1.0, 'F': 0.0
+  'D+': 1.3, 'D': 1.0, 'D-': 0.7, // 🌟 تم إضافة التقدير هنا بنجاح
+  'F': 0.0
 };
 
 const T = {
@@ -52,8 +52,8 @@ const T = {
     langBtn: 'عربي',
     themeLight: '☀ Light',
     themeDark: '☾ Dark',
-    footerBy: 'Built by',
-footerName: 'Eng. Seif Tarek'
+    footerBy: 'Built by',        // 🌟 نصوص الفوتر بالإنجليزي
+    footerName: 'Eng. Seif Tarek'
   },
   ar: {
     logo: '⬡ حاسبة GPA',
@@ -92,8 +92,8 @@ footerName: 'Eng. Seif Tarek'
     langBtn: 'English',
     themeLight: '☀ فاتح',
     themeDark: '☾ داكن',
-    footerBy: 'تطوير وتصميم',
-footerName: 'المستشار / سيف طارق'
+    footerBy: 'تطوير وتصميم',     // 🌟 نصوص الفوتر بالعربي
+    footerName: 'المستشار / سيف طارق'
   }
 };
 
@@ -106,7 +106,12 @@ function init() {
 
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.custom-dropdown')) {
-      document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
+      document.querySelectorAll('.custom-dropdown').forEach(d => {
+        d.classList.remove('open');
+        const rowId = d.id.split('-')[1];
+        const currentRow = document.getElementById(`subject-${rowId}`);
+        if(currentRow) currentRow.style.zIndex = "1"; // بنرجع الـ z-index طبيعي لما نضغط برة
+      });
     }
   });
 }
@@ -150,9 +155,10 @@ function addTerm() {
   list.appendChild(row);
 }
 
+// ── Dropdown Control with Fixed Dynamic z-index ──
 function toggleDropdown(id) {
   const dropdown = document.getElementById(`dropdown-${id}`);
-  const currentRow = document.getElementById(`subject-${id}`); // بنجيب الصف الحالي للمادة
+  const currentRow = document.getElementById(`subject-${id}`);
   
   // أولاً: بنقفل أي قوائم تانية مفتوحة ونرجع ترتيب صفوفها طبيعي
   document.querySelectorAll('.custom-dropdown').forEach(d => {
@@ -168,15 +174,17 @@ function toggleDropdown(id) {
   dropdown.classList.toggle('open');
   
   if (dropdown.classList.contains('open')) {
-    currentRow.style.zIndex = "9999"; // بنرفع الصف كلو فوق كل الصفوف التانية
+    currentRow.style.zIndex = "9999"; // بنرفع الصف كلو فوق كل الصفوف التانية عشان المنيو تبان
   } else {
     currentRow.style.zIndex = "1"; // بنرجعه طبيعي لما تقفل
   }
 }
+
 function selectOption(id, grade) {
   const dropdown = document.getElementById(`dropdown-${id}`);
   const triggerText = dropdown.querySelector('.dropdown-trigger-text');
   const hiddenInput = document.getElementById(`subj-grade-${id}`);
+  const currentRow = document.getElementById(`subject-${id}`);
   
   hiddenInput.value = grade;
   triggerText.textContent = `${grade} (${gradePoints[grade].toFixed(1)})`;
@@ -186,6 +194,7 @@ function selectOption(id, grade) {
   });
   
   dropdown.classList.remove('open');
+  if(currentRow) currentRow.style.zIndex = "1"; // بنرجع الـ z-index طبيعي بعد الاختيار
 }
 
 // ── Add/Delete Subject (Semester Mode) ──
@@ -198,6 +207,7 @@ function addSubject() {
   row.id = `subject-${subjectCount}`;
   row.style.animationDelay = `${(subjectCount-1)*0.05}s`;
   
+  // المنيو هتعمل Loop وتطلع الـ D- تلقائياً لأننا ضفناه في الـ Object فوق
   let optionsHtml = Object.keys(gradePoints).map((g, idx) => `
     <div class="dropdown-option ${idx === 0 ? 'selected' : ''}" data-value="${g}" onclick="selectOption(${subjectCount}, '${g}')">
       <span>${g}</span>
@@ -387,6 +397,7 @@ function getLetterGrade(gpa) {
   if (gpa >= 1.85) return 'C';
   if (gpa >= 1.45) return 'C-';
   if (gpa >= 0.95) return 'D';
+  if (gpa >= 0.65) return 'D-'; // 🌟 يظهر في التقدير الإجمالي النهائي للشهادة
   return 'F';
 }
 
@@ -460,6 +471,14 @@ function applyTranslations() {
   document.getElementById('res-grade-label').textContent = t.resGrade;
   document.getElementById('breakdown-label').textContent = t.breakdown;
   document.getElementById('formula-label').textContent = t.formulaLabel;
+
+  // 🌟 تحديث ترجمة الفوتر الجديد ديناميكياً
+  const footerByEl = document.getElementById('footer-by');
+  const footerNameEl = document.getElementById('footer-name');
+  if (footerByEl && footerNameEl) {
+    footerByEl.textContent = t.footerBy;
+    footerNameEl.textContent = t.footerName;
+  }
 
   reindexLabels('term');
   reindexLabels('subject');
